@@ -1,11 +1,10 @@
 # Origin of this code
 This code was found on http://francois-piette.blogspot.com/2013/04/inter-process-communication-using-pipes.html.
 
-#Changes
+##Changes
 I changed the directory structure of the code, so it is more obvious where to look for certain types of files.
 
-#Licensing
-
+##Licensing
 On his home page Russel stated:
 
     All are welcome, and everything is free...
