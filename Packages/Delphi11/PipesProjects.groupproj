@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A0CBF650-49C9-4FA0-814A-4A7F6449DFF5}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="PipesRunTime.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="PipesDesignTime.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="PipesRunTime">
+        <MSBuild Projects="PipesRunTime.dproj"/>
+    </Target>
+    <Target Name="PipesRunTime:Clean">
+        <MSBuild Projects="PipesRunTime.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PipesRunTime:Make">
+        <MSBuild Projects="PipesRunTime.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="PipesDesignTime">
+        <MSBuild Projects="PipesDesignTime.dproj"/>
+    </Target>
+    <Target Name="PipesDesignTime:Clean">
+        <MSBuild Projects="PipesDesignTime.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PipesDesignTime:Make">
+        <MSBuild Projects="PipesDesignTime.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="PipesRunTime;PipesDesignTime"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="PipesRunTime:Clean;PipesDesignTime:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="PipesRunTime:Make;PipesDesignTime:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

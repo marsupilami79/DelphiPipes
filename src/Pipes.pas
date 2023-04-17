@@ -432,7 +432,7 @@ type
     TFastMemStream = class(TMemoryStream)
     protected
         // Protected declarations
-        function Realloc(var NewCapacity : Longint) : Pointer; override;
+        function Realloc(var NewCapacity : NativeInt) : Pointer; override;
     end;
 
     // Multipacket message handler
@@ -3665,7 +3665,7 @@ end;
 ////////////////////////////////////////////////////////////
 
 
-function TFastMemStream.Realloc(var NewCapacity : Longint) : Pointer;
+function TFastMemStream.Realloc(var NewCapacity : NativeInt) : Pointer;
 var
     dwDelta  : Integer;
     lpMemory : Pointer;
