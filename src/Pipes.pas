@@ -125,6 +125,10 @@ interface
 {$IFNDEF DELPHI_XE2_ABOVE}
   {$DEFINE CPUX86}
 {$ENDIF}
+{$IF RTLVERSION <= 34} // Delphi 10.4 Sydney and below
+  {$DEFINE MEMORYSTREAM_REALLOC_USES_LONGINT}
+{$IFEND}
+
 
 {$WARN SYMBOL_PLATFORM OFF}        // TThreadPriority is specific to Windows
 
@@ -432,7 +436,7 @@ type
     TFastMemStream = class(TMemoryStream)
     protected
         // Protected declarations
-        function Realloc(var NewCapacity : NativeInt) : Pointer; override;
+        function Realloc(var NewCapacity : {$IFDEF MEMORYSTREAM_REALLOC_USES_LONGINT}Longint{$ELSE}NativeInt{$ENDIF}) : Pointer; override;
     end;
 
     // Multipacket message handler
@@ -786,6 +790,10 @@ type
             0 : (Next : PObjectInstance);
             1 : (Method : TWndMethod);
     end;
+
+    {$IF NOT DECLARED(LPARAM)}
+    LPARAM = Longint;
+    {$ENDIF}
 
 const
   {$IFDEF CPUX86}
@@ -3665,7 +3673,7 @@ end;
 ////////////////////////////////////////////////////////////
 
 
-function TFastMemStream.Realloc(var NewCapacity : NativeInt) : Pointer;
+function TFastMemStream.Realloc(var NewCapacity : {$IFDEF MEMORYSTREAM_REALLOC_USES_LONGINT}Longint{$ELSE}NativeInt{$ENDIF}) : Pointer;
 var
     dwDelta  : Integer;
     lpMemory : Pointer;
@@ -3898,7 +3906,7 @@ begin
         // Check assignment
         if Assigned(lpInfo) then
             PostMessage(lpInfo.FThreadWindow, CM_DESTROYWINDOW, 0,
-                Longint(lpInfo));
+                LPARAM(lpInfo));
     finally
         // Leave the critical section
         LeaveCriticalSection(FThreadLock);
@@ -3952,7 +3960,7 @@ begin
 
     // Check assignment, send message to thread window
     if Assigned(lpInfo) then
-        SendMessage(lpInfo.FThreadWindow, CM_EXECPROC, 0, Longint(ThreadSync));
+        SendMessage(lpInfo.FThreadWindow, CM_EXECPROC, 0, LPARAM(ThreadSync));
 end;
 
 
